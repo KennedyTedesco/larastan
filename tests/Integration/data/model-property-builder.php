@@ -35,8 +35,17 @@ function test(Builder $builder, User $user, string $union): void
     User::query()->first(['foo', 'bar']);
     User::query()->first('foo');
 
-    // Joins
-    User::query()->join('roles', 'users.role_id', '=', 'roles.id')->where('roles.foo', 'admin');
+    // Correctly recognizes the `type` column, the model has this column
+    User::query()->join('roles', 'users.role_id', '=', 'roles.id')->where('roles.foo', 'admin')
+        ->where('type', 'admin');
+
+    // Doesn't recognize the `types` column, which is correct, the model does not have this column
+    User::query()->join('roles', 'users.role_id', '=', 'roles.id')->where('roles.foo', 'admin')
+        ->where('types', 'admin');
+
+    // Doesn't recognize the `users.type` column only because of the prefix `users.`
+    User::query()->join('roles', 'users.role_id', '=', 'roles.id')->where('roles.foo', 'admin')
+        ->where('users.type', 'admin');
 }
 
 //// Currently, there is no way to change the type of `$query` inside the callback.

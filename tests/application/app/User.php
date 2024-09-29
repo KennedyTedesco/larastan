@@ -26,6 +26,7 @@ use function get_class;
 
 /**
  * @property string $propertyDefinedOnlyInAnnotation
+ * @property string $type
  *
  * @method Builder<static> scopeSomeScope(Builder $builder)
  *
